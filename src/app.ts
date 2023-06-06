@@ -1,4 +1,5 @@
-const express = require("express");
+import express, { Request, Response } from "express";
+import * as mongoose from "mongoose";
 
 const app = express();
 
@@ -38,17 +39,17 @@ const hubkaBobs = [
   },
 ];
 
-app.get("/hubkaBobs", (req, res) => {
+app.get("/hubkaBobs", (_req: Request, res: Response) => {
   res.json(hubkaBobs);
 });
 
-app.post("/hubkaBobs", (req, res) => {
+app.post("/hubkaBobs", (req: Request, res: Response) => {
   hubkaBobs.push(req.body);
 
   res.status(201).json({ message: "Hubka Bob created." });
 });
 
-app.put("/hubkaBobs/:id", (req, res) => {
+app.put("/hubkaBobs/:id", (req: Request, res: Response) => {
   const { id } = req.params;
   const updatedHubkaBobInfo = req.body;
 
@@ -59,7 +60,7 @@ app.put("/hubkaBobs/:id", (req, res) => {
     .json({ message: "Hubka Bob updatet", data: updatedHubkaBobInfo });
 });
 
-app.delete("/hubkaBobs/:id", (req, res) => {
+app.delete("/hubkaBobs/:id", (req: Request, res: Response) => {
   const { id } = req.params;
   hubkaBobs.splice(+id - 1, 1);
 
@@ -70,5 +71,6 @@ app.post;
 
 const PORT = 5100;
 app.listen(PORT, () => {
+  mongoose.connect("mongodb://127.0.0.1:27017/preview");
   console.log(`Server is started on ${PORT}`);
 });
