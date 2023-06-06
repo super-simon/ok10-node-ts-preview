@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
-import { users } from "../db/users.db";
+import { userService } from "../services/user.service";
 
-interface IUser {
+export interface IUser {
   name: string;
+  email: string;
+  password: string;
   age: number;
   gender: string;
 }
@@ -15,16 +17,24 @@ class UserController {
     next: NextFunction
   ): Promise<Response<IUser[]> | void> {
     try {
-      return res.json(users);
+      const users = await userService.findAll();
+      return res.status(200).json(users);
     } catch (e) {
       next(e);
     }
   }
 
-  public create(req: Request, res: Response) {
-    users.push(req.body);
-
-    res.status(201).json({ message: "Hubka Bob created." });
+  public async create(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response<IUser[]> | void> {
+    try {
+      const user = await userService.create(req.body);
+      res.status(201).json(user);
+    } catch (e) {
+      next(e);
+    }
   }
 
   public updateById(req: Request, res: Response) {
