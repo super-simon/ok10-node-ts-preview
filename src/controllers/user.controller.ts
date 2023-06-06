@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import { users } from "../db/users.db";
 
@@ -11,16 +11,13 @@ interface IUser {
 class UserController {
   public async findAll(
     _req: Request,
-    res: Response
-  ): Promise<Response<IUser[]>> {
+    res: Response,
+    next: NextFunction
+  ): Promise<Response<IUser[]> | void> {
     try {
-      throw new Error("Something weng wrong");
-      // return res.json(users);
+      return res.json(users);
     } catch (e) {
-      return res.json({
-        message: e instanceof Error ? e.message : "Unknown error.",
-        status: 400,
-      });
+      next(e);
     }
   }
 

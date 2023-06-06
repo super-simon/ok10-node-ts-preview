@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { userController } from "../controllers/user.controller";
+import { userMiddleware } from "../middlewares/user.middleware";
 
 const router = Router();
 
@@ -10,6 +11,10 @@ router.post("/", userController.create);
 
 router.put("/:id", userController.updateById);
 
-router.delete("/:id", userController.deleteById);
+router.delete(
+  "/:id",
+  userMiddleware.findByIdOrThrow,
+  userController.deleteById
+);
 
 export const userRouter = router;
