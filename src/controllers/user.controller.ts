@@ -37,22 +37,30 @@ class UserController {
     }
   }
 
-  public updateById(req: Request, res: Response) {
-    const { id } = req.params;
-    const updatedHubkaBobInfo = req.body;
-
-    users[+id - 1] = updatedHubkaBobInfo;
-
-    res
-      .status(200)
-      .json({ message: "Hubka Bob updatet", data: updatedHubkaBobInfo });
+  public async updateById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response<IUser> | void> {
+    try {
+      const updatedUser = await userService.updateById(req.params.id, req.body);
+      res.status(200).json(updatedUser);
+    } catch (e) {
+      next(e);
+    }
   }
 
-  public deleteById(req: Request, res: Response) {
-    const { id } = req.params;
-    users.splice(+id - 1, 1);
-
-    res.status(200).json({ message: "Hubka Bob deleted" });
+  public async deleteById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response<IUser> | void> {
+    try {
+      const deletedUser = await userService.deleteById(req.params.id);
+      res.status(200).json(deletedUser);
+    } catch (e) {
+      next(e);
+    }
   }
 }
 

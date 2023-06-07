@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import { users } from "../db/users.db";
 import { ApiError } from "../errors/api.error";
+import { User } from "../models/User.model";
 
 class UserMiddleware {
   public async findByIdOrThrow(
@@ -10,9 +10,7 @@ class UserMiddleware {
     next: NextFunction
   ) {
     try {
-      const { id } = req.params;
-      const user = users[+id];
-
+      const user = await User.findById(req.params.id);
       if (!user) {
         throw new ApiError("User not found.", 404);
       }

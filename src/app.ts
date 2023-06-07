@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
+import * as mongoose from "mongoose";
 
 import { ApiError } from "./errors/api.error";
 import { userRouter } from "./routers/user.router";
@@ -21,8 +22,7 @@ app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
 
 const PORT = 5100;
 
-// import * as mongoose from "mongoose";
 app.listen(PORT, () => {
-  // mongoose.connect("mongodb://127.0.0.1:27017/preview");
+  mongoose.connect("mongodb://localhost:27017/preview");
   console.log(`Server is started on ${PORT}`);
 });
